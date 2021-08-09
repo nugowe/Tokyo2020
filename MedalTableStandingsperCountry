@@ -20,7 +20,7 @@ Tokyo2020 <- scrape(session) %>% html_nodes("div#medal_standing") %>% html_table
 
 Tokyo2020 <- as.data.frame(Tokyo2020)
 
-Tokyo2020 <- Tokyo2020 %>% slice(1:12)
+Tokyo2020 <- Tokyo2020 %>% slice(1:20)
 
 names(Tokyo2020)[2] <- "Teams"
 names(Tokyo2020)[3] <- "Gold"
