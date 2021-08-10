@@ -1,15 +1,12 @@
-library(gt)
-library(countrycode)
-library(ggflags)
+#!/usr/bin/R
+
 library(rvest)
 library(polite)
 library(dplyr)
 library(magrittr)
 library(purrr)
 library(kableExtra)
-library(bbplot)
-library(magick)
-library(hrbrthemes)
+
 
 url <- "https://olympics.com/tokyo-2020/olympic-games/en/results/all-sports/medal-standings.htm"
 
@@ -30,19 +27,27 @@ Tokyo2020$Flags <- ""
 
 Tokyo2020 <- Tokyo2020 %>% select(c(1,2,9,3:8))
 
+kbl(Tokyo2020) %>%  kable_styling(bootstrap_options = "striped", full_width = F, position = "left") %>%  column_spec(3, image = spec_image(c("https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/d/d9/Russian_Olympic_Committee_logo.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
+                                                                                                                                             
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg", 
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Canada_%28Pantone%29.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Cuba.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/c/c1/Flag_of_Hungary.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/en/1/12/Flag_of_Poland.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Kenya.svg",
+                                                                                                                                             "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg"), 70,70))  %>%  column_spec(1, bold = T, border_right = T) %>%  column_spec(2, bold = T, border_right = T) %>% column_spec(3, bold = T, border_right = T) %>%  column_spec(4, bold = T, border_right = T) %>% column_spec(5, bold = T, border_right = T) %>%  column_spec(6, bold = T, border_right = T) %>% column_spec(7, bold = T, border_right = T) %>%  column_spec(8, bold = T, border_right = T) %>% column_spec(4, width = "0.5em", background = "#D4AF37") %>% column_spec(5, width = "0.5em", background = "#c0c0c0")  %>% column_spec(6, width = "0.5em", background = "#CD7F32") %>%  footnote(symbol=" Datasource: olympics.com." ) 
 
-Tokyo <- data.frame(Tokyo2020$Total, y = Tokyo2020$Rank, country = c("cn", "us", "jp", "ru", "gb", "au", "de", "nl", "it", "fr", "nz", "br", "hu", "ca", "kp", "cu", "pl", "cz", "no", "jm"))
 
-names(Tokyo)[1] <- "TotalMedals"
-names(Tokyo)[2] <- "MedalRank"
-
-
-
-ggplot(Tokyo, aes(x = Tokyo$country, y = Tokyo$TotalMedals, country=country, fill = "green")) + geom_col(fill = Tokyo$MedalRank) + geom_flag()  + scale_country()  + scale_y_discrete(limits = rev) + theme_bw(base_family = 12, base_size = 12) + xlab("Country codes | iso-2") + ylab("Total Medals earned per Country") + ggtitle("Tokyo2020 | Total Medals Earned per Country") + coord_flip() + labs(caption = "datasource:olympics.com")
-
-logo <- image_read_svg("https://upload.wikimedia.org/wikipedia/en/1/1d/2020_Summer_Olympics_logo_new.svg")
-
-grid::grid.raster(logo, x = 1, y = 0.07, just = c('right', 'bottom'), width = unit(1, 'inches'))
-
-kbl(Tokyo2020) %>%  kable_styling(bootstrap_options = "striped", full_width = F, position = "left") %>% column_spec(3, image = spec_image(c("https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg","https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg","https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg","https://upload.wikimedia.org/wikipedia/en/d/d9/Russian_Olympic_Committee_logo.svg","https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg","https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg","https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg","https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg","https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg","https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg","https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg","https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg","https://upload.wikimedia.org/wikipedia/commons/c/c1/Flag_of_Hungary.svg","https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Canada_%28Pantone%29.svg","https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_South_Korea.svg","https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Cuba.svg","https://upload.wikimedia.org/wikipedia/en/1/12/Flag_of_Poland.svg","https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg","https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg","https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Jamaica.svg"), 70,70)) %>%  column_spec(1, bold = T, border_right = T) %>%  column_spec(2, bold = T, border_right = T) %>% column_spec(3, bold = T, border_right = T) %>%  column_spec(4, bold = T, border_right = T) %>% column_spec(5, bold = T, border_right = T) %>%  column_spec(6, bold = T, border_right = T) %>% column_spec(7, bold = T, border_right = T) %>%  column_spec(8, bold = T, border_right = T) %>% column_spec(4, width = "0.5em", background = "#D4AF37") %>% column_spec(5, width = "0.5em", background = "#c0c0c0")  %>% column_spec(6, width = "0.5em", background = "#CD7F32") %>%  footnote(symbol=" Datasource: olympics.com." )
 
